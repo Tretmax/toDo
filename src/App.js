@@ -1,25 +1,45 @@
-import logo from './logo.svg';
+
 import './App.css';
+import Header from './header';
+import ToDoItem from './TodoItem';
+
+const todos = [
+  {
+    name: '123',
+    isDone: false
+  },
+  {
+    name: '321',
+    isDone: true
+  },
+  {
+    name: 'dsdf',
+    isDone: false
+  },
+  {
+    name: 'svdsvds',
+    isDone: false
+  },
+]
+
+
+
+
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Header />
+      <main>
+        <ul>
+        {todos.map ((toDo)=><ToDoItem toDo = {toDo} />)        }
+        </ul>
+
+        <button>Add task</button>
+      </main>
     </div>
-  );
+  )
 }
 
 export default App;
