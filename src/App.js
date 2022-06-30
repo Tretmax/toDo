@@ -2,76 +2,137 @@
 import { useState } from 'react';
 import './App.css';
 import Header from './header';
-import ToDoItem from './TodoItem';
+
 
 function App() {
-
-
-  function refreshStat(todos) {
-    let atWork = todos.length;
-    let complete = 0
-
-    todos.forEach(el => {
-      if (el.isDone) {
-        complete = complete + 1
-      }
-      
-    });
-    setTodoStat ({
-      total: todos.length,
-      atWork: (atWork - complete),
-      complete: (complete)
-    })
-
-  }
-
-
-
-
 
   const [todos, setTodos] = useState([])
 
   const [todoStat, setTodoStat] = useState({
-    total: 0,
-    atWork: 0,
-    complete: 0
+    created: 0,
+    updated: 0,
+    deleted: 0
   })
 
 
   const addToDo = () => {
-    console.log (todos)
+
+
     setTodos([
-      ...todos,
+
       {
+        id: new Date(),
         name,
-        isDone: false
-      }
+        isDone: false,
+        isEdit: false
+      },
+      ...todos
     ])
-    console.log (todos)
-    
-    refreshStat(todos)
+    setName('')
+    setTodoStat({
+      created: (todoStat.created + 1),
+      updated: todoStat.updated,
+      deleted: todoStat.deleted
+
+    })
+
   }
-  console.log (todos)
+
   const [name, setName] = useState('')
 
-// console.log (todoStat)
 
+  const checkTask = (id) => {
+    const copy = [...todos]
+    const current = copy.find(toDo => toDo.id === id)
+    current.isDone = !current.isDone
+    copy.sort((a, b) => (a.isDone - b.isDone))
+    setTodos(copy)
+
+  }
+
+  const editTask = (id) => {
+    const copy = [...todos]
+    const current = copy.find(toDo => toDo.id === id)
+    current.isEdit = !current.isEdit
+    setTodos(copy)
+
+  }
+
+  const delTask = (id) => {
+    const copy = [...todos]
+    const current = copy.findIndex(toDo => toDo.id === id)
+    copy.splice(current, 1)
+    setTodos(copy)
+    setTodoStat({
+      created: todoStat.created,
+      updated: todoStat.updated,
+      deleted: (todoStat.deleted + 1)
+
+    })
+
+  }
+
+  const [newName, setNewName] = useState('')
+  const editNameTask = (id) => {
+    const copy = [...todos]
+    const current = copy.find(toDo => toDo.id === id)
+    current.name = newName
+    current.isEdit = !current.isEdit
+    setTodoStat({
+      created: todoStat.created,
+      updated: (todoStat.updated + 1),
+      deleted: todoStat.deleted
+    })
+    setNewName('')
+    setTodos(copy)
+  }
+
+  const cancelEditTask = (id) => {
+    const copy = [...todos]
+    const current = copy.find(toDo => toDo.id === id)
+    current.isEdit = false
+    setNewName('')
+    setTodos(copy)
+  }
 
   return (
-    <div>
+    <div className='App'>
       <Header stat={todoStat} />
       <main>
+        <input onChange={e => setName(e.target.value)} value={name} onKeyPress={e => e.key === 'Enter' && addToDo(name)} placeholder='Add new task'></   input>
+        <button onClick={() => addToDo()}>Add task</button>
 
-        {todos.map((toDo) => <ToDoItem toDo={toDo} />)}
+        {todos.map((toDo) => {
+
+          if (toDo.isEdit) {
+            return (< p >
+              <input onChange={e => setNewName(e.target.value)} value={newName} onKeyPress={e => e.key === 'Enter' && editNameTask(toDo.id)} />
+              <button onClick={() => editNameTask(toDo.id)}>Save</button>
+              <button onClick={() => cancelEditTask(toDo.id)}>Cancel</button>
+            </p >)
+          } else {
+
+            return (<p>
+              <input type="checkbox" onChange={() => checkTask(toDo.id)} />
+              {toDo.name}
+              <button onClick={() => editTask(toDo.id)}>Edit</button>
+              <button onClick={() => delTask(toDo.id)}>Delete</button>
+            </p>)
+          }
+        })
+        }
 
 
-        <input onChange={e => setName(e.target.value)} value={name} ></input> <button onClick={async() => {await addToDo();refreshStat(todos);}}>Add task</button>
+
+
+
       </main>
     </div>
+
   )
+
 }
 
+
 export default App;
-
-
 

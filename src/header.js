@@ -2,8 +2,8 @@ function Header (prop) {
     // console.log(total)
     return (
         <header>
-            <h1>To Do list</h1>
-            <p> Total tasks: {prop.stat.total}; Tasks at work: {prop.stat.atWork}; Complete tasks: {prop.stat.complete} </p>
+            <h1>ToDo list</h1>
+            <p> Created tasks: {prop.stat.created}; Updated tasks: {prop.stat.updated}; Deleted tasks: {prop.stat.deleted} </p>
         </header>
     )
 }
