@@ -1,5 +1,60 @@
+html{
+
+  background: rgb(170, 170, 170);
+
+}
 .App {
+  display: flex;
   text-align: center;
   margin-top: 5%;
+  margin-bottom: 5%;
+  align-items: center;
+  flex-direction: column;
+  
+
+
 }
 
+.Done {
+
+  text-decoration-line: line-through;
+  
+}
+
+.toDoItem {
+  margin-left: 2%;
+  margin-top: 2%;
+  display: flex;
+border-bottom: 1px solid white;
+  justify-content: space-between;
+  width: 95%;
+  
+
+}
+.text{
+  width: 75%;
+}
+
+main {
+
+  width: 50%;
+
+}
+
+.buttons {
+  justify-content: end;
+}
+
+.addToDoItem {
+  justify-content: center;
+
+
+}
+
+.toDoList {
+  margin-top: 5%;
+  border: 2px solid gray;
+  border-radius: 20px;
+  background-color: rgba(255, 251, 251, 0.288);
+  
+}

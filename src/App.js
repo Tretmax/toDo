@@ -1,18 +1,49 @@
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './App.css';
 import Header from './header';
 
+// {localStorage.clear()}
+const getSaveTodos = () => {
+  const saveTodos = localStorage.getItem('saveTodos')
+  if (saveTodos === null) {
+    return []
+
+  } else {
+    return JSON.parse(saveTodos)
+  }
+}
+
+const getSaveStat = () => {
+  const saveStat = localStorage.getItem('saveStat')
+  if (saveStat === null) {
+    return {
+      created: 0,
+      updated: 0,
+      deleted: 0
+    }
+
+  } else {
+    return JSON.parse(saveStat)
+  }
+}
+
+
+const saveData = (todos, stat) => {
+  localStorage.setItem('saveTodos', JSON.stringify(todos))
+  localStorage.setItem('saveStat', JSON.stringify(stat))
+
+
+
+}
 
 function App() {
 
-  const [todos, setTodos] = useState([])
 
-  const [todoStat, setTodoStat] = useState({
-    created: 0,
-    updated: 0,
-    deleted: 0
-  })
+
+  const [todos, setTodos] = useState(getSaveTodos())
+
+  const [todoStat, setTodoStat] = useState(getSaveStat())
 
 
   const addToDo = () => {
@@ -95,39 +126,51 @@ function App() {
     setTodos(copy)
   }
 
+  useEffect(() => {
+    saveData(todos, todoStat)
+
+  })
   return (
+
     <div className='App'>
       <Header stat={todoStat} />
       <main>
-        <input onChange={e => setName(e.target.value)} value={name} onKeyPress={e => e.key === 'Enter' && addToDo(name)} placeholder='Add new task'></   input>
-        <button onClick={() => addToDo()}>Add task</button>
+        <div className='addToDoItem'><input className='text' onChange={e => setName(e.target.value)} value={name} onKeyPress={e => e.key === 'Enter' && addToDo(name)} placeholder='Add new task'></   input>
+          <button onClick={() => addToDo()}>Add task</button>
+        </div>
+        <div className='toDoList'>
+          {todos.map((toDo) => {
 
-        {todos.map((toDo) => {
+            if (toDo.isEdit) {
+              return (< div className='toDoItem'>
+                <input className='text' onChange={e => setNewName(e.target.value)} value={newName} onKeyPress={e => e.key === 'Enter' && editNameTask(toDo.id)} />
+                <div className='buttons'>
+                  <button onClick={() => editNameTask(toDo.id)}>Save</button>
+                  <button onClick={() => cancelEditTask(toDo.id)}>Cancel</button>
+                </div >
+              </div >)
+            } else {
 
-          if (toDo.isEdit) {
-            return (< p >
-              <input onChange={e => setNewName(e.target.value)} value={newName} onKeyPress={e => e.key === 'Enter' && editNameTask(toDo.id)} />
-              <button onClick={() => editNameTask(toDo.id)}>Save</button>
-              <button onClick={() => cancelEditTask(toDo.id)}>Cancel</button>
-            </p >)
-          } else {
+              return (
+                <div className='toDoItem'>
+                  <label className={toDo.isDone ? 'Done' : 'atWork'}>
+                    <input type="checkbox"  onClick={() => checkTask(toDo.id)} checked={toDo.isDone ? true : false}/>
+                    {toDo.name}
+                  </label>
+                  <div className='buttons'>
+                    <button onClick={() => editTask(toDo.id)}>Edit</button>
+                    <button onClick={() => delTask(toDo.id)}>Delete</button>
+                  </div>
+                </div>)
 
-            return (<p>
-              <input type="checkbox" onChange={() => checkTask(toDo.id)} />
-              {toDo.name}
-              <button onClick={() => editTask(toDo.id)}>Edit</button>
-              <button onClick={() => delTask(toDo.id)}>Delete</button>
-            </p>)
+            }
+          })
+
           }
-        })
-        }
+        </div>
 
-
-
-
-
-      </main>
-    </div>
+      </main >
+    </div >
 
   )
 
