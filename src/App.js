@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import './App.css';
 import Header from './header';
 
-// {localStorage.clear()}
+// { localStorage.clear() }
 const getSaveTodos = () => {
   const saveTodos = localStorage.getItem('saveTodos')
   if (saveTodos === null) {
@@ -98,11 +98,37 @@ function App() {
       created: todoStat.created,
       updated: todoStat.updated,
       deleted: (todoStat.deleted + 1)
-
     })
-
   }
 
+  const getTasks = () => {
+    fetch('https://gist.githubusercontent.com/alexandrtovmach/0c8a29b734075864727228c559fe9f96/raw/c4e4133c9658af4c4b3474475273b23b4a70b4af/todo-task.json')
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+
+        const copy = [...todos]
+
+        data.forEach(el => {
+         copy.push(
+              {
+              id: el.id,
+              name: el.text,
+              isDone: el.isCompleted,
+              isEdit: false
+            },
+             )
+             copy.sort((a, b) => (a.isDone - b.isDone))
+             setTodoStat({
+              created: (todoStat.created+data.length),
+              updated: todoStat.updated,
+              deleted: (todoStat.deleted)
+            })
+             setTodos(copy)
+        })
+      })
+  }
   const [newName, setNewName] = useState('')
   const editNameTask = (id) => {
     const copy = [...todos]
@@ -137,6 +163,7 @@ function App() {
       <main>
         <div className='addToDoItem'><input className='text' onChange={e => setName(e.target.value)} value={name} onKeyPress={e => e.key === 'Enter' && addToDo(name)} placeholder='Add new task'></   input>
           <button onClick={() => addToDo()}>Add task</button>
+          <button onClick={() => getTasks()}>Get tasks</button>
         </div>
         <div className='toDoList'>
           {todos.map((toDo) => {
@@ -154,7 +181,7 @@ function App() {
               return (
                 <div className='toDoItem'>
                   <label className={toDo.isDone ? 'Done' : 'atWork'}>
-                    <input type="checkbox"  onClick={() => checkTask(toDo.id)} checked={toDo.isDone ? true : false}/>
+                    <input type="checkbox" onClick={() => checkTask(toDo.id)} checked={toDo.isDone ? true : false} />
                     {toDo.name}
                   </label>
                   <div className='buttons'>
@@ -178,4 +205,3 @@ function App() {
 
 
 export default App;
-
