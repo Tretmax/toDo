@@ -1,9 +1,10 @@
 
 import { useEffect, useState } from 'react';
 import './App.css';
-import Header from './header';
+import Header from './components/header';
+import ToDoList from './components/ToDoList';
 
-// { localStorage.clear() }
+{ localStorage.clear() }
 const getSaveTodos = () => {
   const saveTodos = localStorage.getItem('saveTodos')
   if (saveTodos === null) {
@@ -46,111 +47,8 @@ function App() {
   const [todoStat, setTodoStat] = useState(getSaveStat())
 
 
-  const addToDo = () => {
 
 
-    setTodos([
-
-      {
-        id: new Date(),
-        name,
-        isDone: false,
-        isEdit: false
-      },
-      ...todos
-    ])
-    setName('')
-    setTodoStat({
-      created: (todoStat.created + 1),
-      updated: todoStat.updated,
-      deleted: todoStat.deleted
-
-    })
-
-  }
-
-  const [name, setName] = useState('')
-
-
-  const checkTask = (id) => {
-    const copy = [...todos]
-    const current = copy.find(toDo => toDo.id === id)
-    current.isDone = !current.isDone
-    copy.sort((a, b) => (a.isDone - b.isDone))
-    setTodos(copy)
-
-  }
-
-  const editTask = (id) => {
-    const copy = [...todos]
-    const current = copy.find(toDo => toDo.id === id)
-    current.isEdit = !current.isEdit
-    setTodos(copy)
-
-  }
-
-  const delTask = (id) => {
-    const copy = [...todos]
-    const current = copy.findIndex(toDo => toDo.id === id)
-    copy.splice(current, 1)
-    setTodos(copy)
-    setTodoStat({
-      created: todoStat.created,
-      updated: todoStat.updated,
-      deleted: (todoStat.deleted + 1)
-    })
-  }
-
-  const getTasks = () => {
-    fetch('https://gist.githubusercontent.com/alexandrtovmach/0c8a29b734075864727228c559fe9f96/raw/c4e4133c9658af4c4b3474475273b23b4a70b4af/todo-task.json')
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-
-        const copy = [...todos]
-
-        data.forEach(el => {
-         copy.push(
-              {
-              id: el.id,
-              name: el.text,
-              isDone: el.isCompleted,
-              isEdit: false
-            },
-             )
-             copy.sort((a, b) => (a.isDone - b.isDone))
-             setTodoStat({
-              created: (todoStat.created+data.length),
-              updated: todoStat.updated,
-              deleted: (todoStat.deleted)
-            })
-             setTodos(copy)
-        })
-      })
-  }
-  const [newName, setNewName] = useState('')
-  const editNameTask = (id) => {
-    const copy = [...todos]
-    const current = copy.find(toDo => toDo.id === id)
-    current.name = newName
-    current.isEdit = !current.isEdit
-    setTodoStat({
-      created: todoStat.created,
-      updated: (todoStat.updated + 1),
-      deleted: todoStat.deleted
-    })
-    setNewName('')
-    setTodos(copy)
-  }
-
-  const cancelEditTask = (id) => {
-    const copy = [...todos]
-    const current = copy.find(toDo => toDo.id === id)
-    current.isEdit = false
-    setNewName('')
-    setTodos(copy)
-  }
 
   useEffect(() => {
     saveData(todos, todoStat)
@@ -161,41 +59,7 @@ function App() {
     <div className='App'>
       <Header stat={todoStat} />
       <main>
-        <div className='addToDoItem'><input className='text' onChange={e => setName(e.target.value)} value={name} onKeyPress={e => e.key === 'Enter' && addToDo(name)} placeholder='Add new task'></   input>
-          <button onClick={() => addToDo()}>Add task</button>
-          <button onClick={() => getTasks()}>Get tasks</button>
-        </div>
-        <div className='toDoList'>
-          {todos.map((toDo) => {
-
-            if (toDo.isEdit) {
-              return (< div className='toDoItem'>
-                <input className='text' onChange={e => setNewName(e.target.value)} value={newName} onKeyPress={e => e.key === 'Enter' && editNameTask(toDo.id)} />
-                <div className='buttons'>
-                  <button onClick={() => editNameTask(toDo.id)}>Save</button>
-                  <button onClick={() => cancelEditTask(toDo.id)}>Cancel</button>
-                </div >
-              </div >)
-            } else {
-
-              return (
-                <div className='toDoItem'>
-                  <label className={toDo.isDone ? 'Done' : 'atWork'}>
-                    <input type="checkbox" onClick={() => checkTask(toDo.id)} checked={toDo.isDone ? true : false} />
-                    {toDo.name}
-                  </label>
-                  <div className='buttons'>
-                    <button onClick={() => editTask(toDo.id)}>Edit</button>
-                    <button onClick={() => delTask(toDo.id)}>Delete</button>
-                  </div>
-                </div>)
-
-            }
-          })
-
-          }
-        </div>
-
+        <ToDoList todos={todos} setTodos={setTodos} todoStat={todoStat} setTodoStat={setTodoStat}/>
       </main >
     </div >
 
