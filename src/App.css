@@ -68,3 +68,17 @@ main {
   background-color: rgba(255, 251, 251, 0.288);
   
 } */
+
+@media screen and (max-width: 750px) {
+
+
+  main {
+
+    width: 95%;
+  
+  }
+
+}
+
+
+
