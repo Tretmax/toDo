@@ -32,9 +32,9 @@ const ButtonAdd = styled.button`
   const [name, setName] = useState('')
 
   const colorConstructor = ()=>{
-    const r = Math.floor(Math.random()*1000)
-    const g = Math.floor(Math.random()*1000)
-    const b = Math.floor(Math.random()*1000)
+    const r = Math.floor(Math.random()*255)
+    const g = Math.floor(Math.random()*255)
+    const b = Math.floor(Math.random()*255)
     const a = 0.700
 
     return `rgb(${r}, ${g}, ${b}, ${a})`
