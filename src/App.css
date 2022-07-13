@@ -1,7 +1,11 @@
 html{
 
-  background: rgb(170, 170, 170);
-
+  background: rgba(66, 23, 23, 0.452);
+  
+}
+label {
+  display: flex;
+  width: 75%;
 }
 .App {
   display: flex;
@@ -14,25 +18,30 @@ html{
 
 
 }
+.atWork{
+  text-align: start
+
+}
 
 .Done {
 
   text-decoration-line: line-through;
+  text-align: start
   
 }
 
-.toDoItem {
+/* .toDoItem {
   margin-left: 2%;
   margin-top: 2%;
   display: flex;
 border-bottom: 1px solid white;
   justify-content: space-between;
-  width: 95%;
+  width: 95%; */
   
 
-}
+/* } */
 .text{
-  width: 75%;
+  width: 70%;
 }
 
 main {
@@ -42,7 +51,8 @@ main {
 }
 
 .buttons {
-  justify-content: end;
+  width: 25%;
+ 
 }
 
 .addToDoItem {
@@ -51,10 +61,10 @@ main {
 
 }
 
-.toDoList {
+/* .toDoList {
   margin-top: 5%;
   border: 2px solid gray;
   border-radius: 20px;
   background-color: rgba(255, 251, 251, 0.288);
   
-}
+} */

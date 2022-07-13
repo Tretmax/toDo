@@ -3,8 +3,10 @@ import { useEffect, useState } from 'react';
 import './App.css';
 import Header from './components/header';
 import ToDoList from './components/ToDoList';
+import React from 'react';
 
-{ localStorage.clear() }
+// { localStorage.clear() }
+
 const getSaveTodos = () => {
   const saveTodos = localStorage.getItem('saveTodos')
   if (saveTodos === null) {

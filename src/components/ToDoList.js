@@ -1,12 +1,46 @@
 import { useState } from "react"
 import ToDoItem from "./ToDoItem"
+import React from 'react';
+import styled from 'styled-components'
 
 
+const ButtonAdd = styled.button`
+  background: transponent;
+  border-radius: 5px;
+  border: 2px solid green;
+  color: green;
+  margin: 0 0.2em;
+  padding: 0.1em 1em;`
 
-function ToDoList({todos,setTodos,todoStat,setTodoStat}) {
+  const ButtonGet = styled.button`
+  background: green;
+  border-radius: 5px;
+  border: 2px solid green;
+  color: white;
+  margin: 0 0.2em;
+  padding: 0.1em 1em;`
+
+  const List = styled.div`
+  margin-top: 5%;
+  border: 2px solid gray;
+  border-radius: 20px;
+  background-color: rgba(255, 251, 251, 0.288);`
+
+
+  function ToDoList({todos,setTodos,todoStat,setTodoStat}) {
 
   const [name, setName] = useState('')
 
+  const colorConstructor = ()=>{
+    const r = Math.floor(Math.random()*1000)
+    const g = Math.floor(Math.random()*1000)
+    const b = Math.floor(Math.random()*1000)
+    const a = 0.700
+
+    return `rgb(${r}, ${g}, ${b}, ${a})`
+
+  }
+ 
   const addToDo = () => {
 
 
@@ -16,7 +50,8 @@ function ToDoList({todos,setTodos,todoStat,setTodoStat}) {
         id: new Date(),
         name,
         isDone: false,
-        isEdit: false
+        isEdit: false,
+        color: colorConstructor ()
       },
       ...todos
     ])
@@ -41,12 +76,13 @@ function ToDoList({todos,setTodos,todoStat,setTodoStat}) {
         const copy = [...todos]
 
         data.forEach(el => {
-          copy.push(
+          copy.unshift(
             {
               id: el.id,
               name: el.text,
               isDone: el.isCompleted,
-              isEdit: false
+              isEdit: false,
+              color: colorConstructor ()
             },
           )
           copy.sort((a, b) => (a.isDone - b.isDone))
@@ -63,12 +99,12 @@ function ToDoList({todos,setTodos,todoStat,setTodoStat}) {
   return (
     <>
       <div className='addToDoItem'><input className='text' onChange={e => setName(e.target.value)} value={name} onKeyPress={e => e.key === 'Enter' && addToDo(name)} placeholder='Add new task'></   input>
-        <button onClick={() => addToDo()}>Add task</button>
-        <button onClick={() => getTasks()}>Get tasks</button>
+        <ButtonAdd onClick={() => addToDo()}>Add task</ButtonAdd>
+        <ButtonGet onClick={() => getTasks()}>Get tasks</ButtonGet>
       </div>
-      <div className='toDoList'>
+      <List>
         <ToDoItem todos={todos} setTodos={setTodos} todoStat={todoStat} setTodoStat={setTodoStat}/>
-      </div>
+      </List>
     </>
   )
 }
