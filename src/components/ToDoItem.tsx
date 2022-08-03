@@ -1,6 +1,11 @@
-import { useState } from "react"
+import { Dispatch, SetStateAction, useState } from "react"
 import React from 'react';
 import styled from 'styled-components'
+import { deleteTodo } from "../Store/actions";
+import { useDispatch } from "react-redux";
+import { chekTodo } from "../Store/actions";
+import { ToDoStat } from "../Store/statReducer";
+
 
 const ButtonDel = styled.button`
   background: red;
@@ -35,24 +40,50 @@ const ItemArea = styled.div`
 border-bottom: 1px solid white;
   justify-content: space-between;
   width: 95%;
-  background: ${props =>props.color }
+  background: ${(props: { color: string; }) => props.color}
 
   `
 
 
 
-function ToDoItem({ todos, setTodos, todoStat, setTodoStat }) {
+interface Todo {
+    id: number;
+    name: string;
+    isDone: boolean;
+    isEdit: boolean;
+    color: string
+}
+interface props {
+    todos: [Todo];
+    setTodos: Dispatch<[Todo]>;
+    todoStat: ToDoStat;
+    setTodoStat: Dispatch<SetStateAction<ToDoStat>>
+}
 
-    const checkTask = (id) => {
-        const copy = [...todos]
-        const current = copy.find(toDo => toDo.id === id)
-        current.isDone = !current.isDone
-        copy.sort((a, b) => (a.isDone - b.isDone))
-        setTodos(copy)
+
+function ToDoItem({ todos, setTodos, todoStat, setTodoStat }: props) {
+const dispatch = useDispatch ()
+
+    const checkTask = (id: number) => {
+        dispatch (chekTodo (id))
 
     }
 
-    const editTask = (id) => {
+    // const checkTask = (id: number) => {
+    //     const copy = [...todos]
+    //     const current = copy.find(toDo => toDo.id === id)
+    //     current.isDone = !current.isDone
+    //     copy.sort((a, b) => {
+    //         if (a.isDone === false && b.isDone === true) return -1;
+    //         if (a.isDone === true && b.isDone === false) return 1;
+    //         else return 0;
+    //     })
+
+    //     setTodos(copy)
+
+    // }
+
+    const editTask = (id: number) => {
         const copy = [...todos]
         const current = copy.find(toDo => toDo.id === id)
         current.isEdit = !current.isEdit
@@ -60,20 +91,26 @@ function ToDoItem({ todos, setTodos, todoStat, setTodoStat }) {
 
     }
 
-    const delTask = (id) => {
-        const copy = [...todos]
-        const current = copy.findIndex(toDo => toDo.id === id)
-        copy.splice(current, 1)
-        setTodos(copy)
-        setTodoStat({
-            created: todoStat.created,
-            updated: todoStat.updated,
-            deleted: (todoStat.deleted + 1)
-        })
+    const delTask = (id: number) => {
+       dispatch (deleteTodo (id))
     }
 
+
+    // const delTask = (id: number) => {
+    //     const copy = [...todos]
+    //     const current = copy.findIndex(toDo => toDo.id === id)
+    //     copy.splice(current, 1)
+    //     setTodos(copy)
+    //     setTodoStat({
+    //         created: todoStat.created,
+    //         updated: todoStat.updated,
+    //         deleted: (todoStat.deleted + 1)
+    //     })
+    // }
+
+
     const [newName, setNewName] = useState('')
-    const editNameTask = (id) => {
+    const editNameTask = (id: number) => {
         const copy = [...todos]
         const current = copy.find(toDo => toDo.id === id)
         current.name = newName
@@ -87,7 +124,7 @@ function ToDoItem({ todos, setTodos, todoStat, setTodoStat }) {
         setTodos(copy)
     }
 
-    const cancelEditTask = (id) => {
+    const cancelEditTask = (id: number) => {
         const copy = [...todos]
         const current = copy.find(toDo => toDo.id === id)
         current.isEdit = false
@@ -98,10 +135,10 @@ function ToDoItem({ todos, setTodos, todoStat, setTodoStat }) {
     return (
 
         <div>
-            {todos.map((toDo) => {
+            {todos.map((toDo: Todo) => {
 
                 if (toDo.isEdit) {
-                    return (< ItemArea color = {toDo.color}>
+                    return (< ItemArea color={toDo.color}>
                         <input className='text' onChange={e => setNewName(e.target.value)} value={newName} onKeyPress={e => e.key === 'Enter' && editNameTask(toDo.id)} />
                         <div className='buttons'>
                             <ButtonSave onClick={() => editNameTask(toDo.id)}>Save</ButtonSave>
@@ -111,7 +148,7 @@ function ToDoItem({ todos, setTodos, todoStat, setTodoStat }) {
                 } else {
 
                     return (
-                        <ItemArea color = {toDo.color}>
+                        <ItemArea color={toDo.color}>
                             <label className={toDo.isDone ? 'Done' : 'atWork'}>
                                 <input type="checkbox" onClick={() => checkTask(toDo.id)} checked={toDo.isDone ? true : false} />
 
@@ -133,3 +170,4 @@ function ToDoItem({ todos, setTodos, todoStat, setTodoStat }) {
     )
 }
 export default ToDoItem
+

@@ -4,6 +4,8 @@ import './App.css';
 import Header from './components/header';
 import ToDoList from './components/ToDoList';
 import React from 'react';
+import { BooleanLiteral } from 'typescript';
+import { ToDoStat } from './Store/statReducer';
 
 // { localStorage.clear() }
 
@@ -32,24 +34,28 @@ const getSaveStat = () => {
 }
 
 
-const saveData = (todos, stat) => {
+const saveData = (todos:[], stat: ToDoStat) => {
   localStorage.setItem('saveTodos', JSON.stringify(todos))
   localStorage.setItem('saveStat', JSON.stringify(stat))
 
-
-
 }
+
+
+
+
+
 
 function App() {
 
 
 
-  const [todos, setTodos] = useState(getSaveTodos())
 
-  const [todoStat, setTodoStat] = useState(getSaveStat())
+  const [todos, setTodos] = useState (getSaveTodos())
+
+  const [todoStat, setTodoStat] = useState<ToDoStat>(getSaveStat())
 
 
-
+  // console.log(11)
 
 
   useEffect(() => {
@@ -59,9 +65,9 @@ function App() {
   return (
 
     <div className='App'>
-      <Header stat={todoStat} />
+      <Header todoStat={todoStat} />
       <main>
-        <ToDoList todos={todos} setTodos={setTodos} todoStat={todoStat} setTodoStat={setTodoStat}/>
+        <ToDoList todos={todos} setTodos={setTodos} todoStat={todoStat} setTodoStat={setTodoStat} />
       </main >
     </div >
 
