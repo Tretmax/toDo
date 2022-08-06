@@ -1,14 +1,21 @@
-import React from "react";
-import { ToDoStat } from "../Store/statReducer";
+
+  import { useSelector } from "react-redux";
+
   
-  
-function Header ({todoStat}:any) {
+function Header () {
       
-    
+    const stats = useSelector((state:any) => {
+        
+        
+        return state.statReducer
+    })
+
+   
+ 
     return (
         <header>
             <h1>ToDo list</h1>
-            <p> Created tasks: {todoStat.created}; Updated tasks: {todoStat.updated}; Deleted tasks: {todoStat.deleted} </p>
+            <p> Created tasks: {stats.created}; Updated tasks: {stats.updated}; Deleted tasks: {stats.deleted} </p>
         </header>
     )
 }

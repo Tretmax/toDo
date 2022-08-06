@@ -1,5 +1,6 @@
-import { addTodo } from "../Store/actions";
-import { Todo } from "../components/ToDoList"
+
+import { Todo } from "../components/ToDoList";
+
 
 
 interface Action {
@@ -12,11 +13,12 @@ interface Action {
 }
 
 
-const defaultTodos:any  = [] 
+
+const defaultTodos: any = []
 
 
-const todosReducer = (state = defaultTodos, { type, id, name, isDone, isEdit, color }: Action) => {
-    
+const todosReducer = (state = defaultTodos, { type, id, name, isDone, color }: Action) => {
+
 
     switch (type) {
         case "addTask":
@@ -24,41 +26,44 @@ const todosReducer = (state = defaultTodos, { type, id, name, isDone, isEdit, co
                 id: id,
                 name: name,
                 isDone: isDone,
-                isEdit: isEdit,
                 color: color
             }, ...state
             ]
-            state.sort((a:Todo, b:Todo) => {
+            state.sort((a: Todo, b: Todo) => {
                 if (a.isDone === false && b.isDone === true) return -1;
                 if (a.isDone === true && b.isDone === false) return 1;
                 else return 0;
             })
-            console.log(state)
+
             return state
-            
+
 
         case "delTask":
+            const newState = [...state]
             const currentDel = state.findIndex((toDo: Todo) => toDo.id === id)
-            state.splice(currentDel, 1)
-
-            return state
+            newState.splice(currentDel, 1)
+            // console.log(state)
+            return newState
 
         case "chekTask":
-            const currentChek = state.find((toDo: Todo) => toDo.id === id)
+            const newState1 = [...state]
+            const currentChek = newState1.find((toDo: Todo) => toDo.id === id)
             currentChek.isDone = !currentChek.isDone
-            state.sort((a:Todo, b:Todo) => {
+            newState1.sort((a: Todo, b: Todo) => {
                 if (a.isDone === false && b.isDone === true) return -1;
                 if (a.isDone === true && b.isDone === false) return 1;
                 else return 0;
             })
-               
-        return state
 
-           
+            return newState1
 
+        case "updateTask":
+            const newState2 = [...state]
+            const currentTask = newState2.find((toDo: Todo) => toDo.id === id)
+            currentTask.name = name
 
-        // case "deleteTask":
-        //     return { ...state, del: state.deleted + 1 }
+            return newState2
+
         default:
             return state
     }

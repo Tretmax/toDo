@@ -1,47 +1,56 @@
+
 import { Todo } from "../components/ToDoList"
 
 
 
-export const addTodo = (newTodo:Todo) => {
-       return  {
-       
+export const addTodo = (newTodo: Todo) => {
+    return {
+
         type: "addTask",
-        id: newTodo.id ,
+        id: newTodo.id,
         name: newTodo.name,
         isDone: newTodo.isDone,
-        isEdit: newTodo.isEdit,
         color: newTodo.color
     }
 }
 
-export const deleteTodo = (id:number) => {
+export const deleteTodo = (id: number) => {
     return {
         type: "delTask",
-        payload: id
+        id: id
     }
 }
 
-export const editTodo = (id:number) => {
+export const editTodo = (id: number, name:string) => {
     return {
         type: "updateTask",
-        payload: id
+        id: id,
+        name: name
     }
 }
 
-export const chekTodo = (id:number) => {
+export const chekTodo = (id: number) => {
     return {
         type: "chekTask",
-        payload: id
+        id: id
     }
 }
 
-export const saveEditTodo = (text:string, id:number) => {
+export const modalAdd = () => {
     return {
-        type: "saveTodo",
-        payload: {
-            text,
-            id
-        }
+        type: "modalAdd"        
     }
 }
 
+export const modalUpdate = (id:number) => {
+    return {
+        type: "modalUpdate",
+        id:id
+    }
+}
+
+export const modalCancel = () => {
+    return {
+        type: "modalCancel"
+    }
+}
