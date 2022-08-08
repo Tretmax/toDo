@@ -16,7 +16,7 @@ const ButtonDel = styled.button`
   margin: 0 0.2em;
   padding: 0.1em 1em;`
 
-const ButtonCancel = ButtonDel
+
 
 const ButtonEdit = styled.button`
   background: transponent;
@@ -26,13 +26,6 @@ const ButtonEdit = styled.button`
   margin: 0 0.2em;
   padding: 0.1em 1em;`
 
-const ButtonSave = styled.button`
-  background: Blue;
-  border-radius: 5px;
-  border: 2px solid Blue;
-  color: white;
-  margin: 0 0.2em;
-  padding: 0.1em 1em;`
 
 const ItemArea = styled.div`
   margin-left: 2%;

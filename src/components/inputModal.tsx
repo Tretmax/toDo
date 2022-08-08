@@ -7,7 +7,23 @@ import { useSelector } from "react-redux";
 import { modalCancel } from "../Store/actions";
 
 
+const ModalWrapper = styled.div`
+width: 100%;
+height: 100%;
+background-color: rgba(0, 0, 0, 0.4);
+position: fixed;
+top: 0;
+display: flex;
+justify-content: center;
+align-items: center;
+opacity: ${(props: { isActive: boolean }) => props.isActive ? '1' : '0'};
+pointer-events: ${props => props.isActive ? 'all' : 'none'};`
 
+const ButtonsArea = styled.div`
+display: flex;
+  width: 25%;
+  justify-content: center;
+  align-items: center;`
 
 const ButtonCancel = styled.button`
   background: red;
@@ -75,20 +91,19 @@ const InputModal = () => {
   }
 
   return (
-    < div className={modalStatus.active ? 'modal active' : 'modal'} onClick={() => dispatch(modalCancel())}>
+    < ModalWrapper isActive={(modalStatus.active)} onClick={() => dispatch(modalCancel())}>
 
       <InputArea onClick={e => e.stopPropagation()}>
 
         <input className='text' onChange={e => setName(e.target.value)} value={name} onKeyPress={e => e.key === 'Enter' && ('modalAdd' ? addToDo() : edit())} />
-        <div className='buttons'>
-          {/* if(modalStatus.type ==='modalAdd' ){ */}
+        <ButtonsArea>
           <ButtonSave onClick={() => modalStatus.type === 'modalAdd' ? addToDo() : edit()}>Save</ButtonSave>
 
           <ButtonCancel onClick={() => dispatch(modalCancel())}>Cancel</ButtonCancel>
-        </div >
+        </ButtonsArea >
       </InputArea>
 
-    </div >
+    </ModalWrapper >
 
   )
 }

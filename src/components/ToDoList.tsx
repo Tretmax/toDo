@@ -50,8 +50,7 @@ interface SavedData {
 
 
 function ToDoList() {
-  const [name, setName] = useState('')
-
+  
   const dispatch = useDispatch()
 
   const colorConstructor = () => {
